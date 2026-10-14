@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 35">
+  <rect width="50" height="35" rx="6" fill="#555555"/>
+  <text x="25" y="14" font-family="Arial,sans-serif" font-size="9" font-weight="bold" fill="white" text-anchor="middle">WIRE</text>
+  <text x="25" y="26" font-family="Arial,sans-serif" font-size="9" font-weight="bold" fill="white" text-anchor="middle">TRANSFER</text>
+</svg>

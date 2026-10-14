@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1178F2">
+<title>Bem-vindo</title>
+<style>
+  :root {
+    --azul: #1178F2;
+    --azul-escuro: #0b5ccc;
+    --azul-medio: #7db4f8;
+    --azul-claro: #dbeafd;
+    --cinza: #f5f9ff;
+    --branco: #ffffff;
+    --verde: #1f9d4d;
+    --texto: #14233f;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: max(16px, env(safe-area-inset-top)) max(14px, env(safe-area-inset-right)) max(16px, env(safe-area-inset-bottom)) max(14px, env(safe-area-inset-left));
+    font-family: "Segoe UI", system-ui, -apple-system, Roboto, Arial, sans-serif;
+    background: var(--branco);
+    color: var(--texto);
+    overflow-x: hidden;
+  }
+
+  /* Bolinhas caindo */
+  #bolinhas {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 0;
+  }
+  .bolinha {
+    position: absolute;
+    top: -20px;
+    border-radius: 50%;
+    opacity: .8;
+    will-change: transform;
+    animation-name: cair;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+  }
+  @keyframes cair {
+    0%   { transform: translate3d(0, -5vh, 0); }
+    50%  { transform: translate3d(var(--vai, 12px), 55vh, 0); }
+    100% { transform: translate3d(0, 110vh, 0); }
+  }
+
+  /* Pop up */
+  .popup {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 380px;
+    background: var(--branco);
+    border-radius: 22px;
+    padding: clamp(14px, 4vw, 20px) clamp(14px, 4.5vw, 20px) clamp(14px, 3.5vw, 18px);
+    box-shadow: 0 22px 54px rgba(17, 120, 242, .28), 0 6px 16px rgba(17, 120, 242, .12);
+    animation: entrar .6s ease-out both;
+  }
+  @keyframes entrar {
+    from { opacity: 0; transform: translateY(28px) scale(.97); }
+    to   { opacity: 1; transform: none; }
+  }
+  .logo-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin: 12px 0;
+  }
+
+  .logo {
+    width: 80px;
+    height: auto;
+    display: block;
+  }
+  h1 {
+    font-size: clamp(21px, 6.2vw, 26px);
+    line-height: 1.15;
+    font-weight: 400;
+    color: var(--texto);
+  }
+  h1 strong { font-weight: 800; color: var(--verde); white-space: nowrap; }
+  .subtitulo {
+    margin-top: 6px;
+    font-size: clamp(14px, 3.8vw, 15px);
+    font-weight: 400;
+    color: #5a6b8c;
+  }
+
+  /* Atividade */
+  .atividade {
+    margin-top: clamp(12px, 3.5vw, 16px);
+    background: var(--cinza);
+    border: 1px solid var(--azul-claro);
+    border-radius: 16px;
+    padding: 11px 12px 13px;
+  }
+  .atividade-titulo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13.5px;
+    color: #66789a;
+    margin-bottom: 12px;
+  }
+  .atividade-titulo i {
+    flex: none;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--verde);
+    animation: piscar 1.6s ease-in-out infinite;
+  }
+  @keyframes piscar { 50% { opacity: .35; } }
+  .linha { margin-bottom: 13px; }
+  .linha:last-child { margin-bottom: 0; }
+  .linha-topo {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 10px;
+    font-size: clamp(13px, 3.5vw, 14px);
+    line-height: 1.25;
+    color: #26364f;
+  }
+  .linha-topo b {
+    flex: none;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--verde);
+    font-variant-numeric: tabular-nums;
+  }
+  .linha-topo em { font-style: normal; }
+  .barra {
+    height: 9px;
+    margin-top: 6px;
+    border-radius: 999px;
+    background: var(--azul-claro);
+    overflow: hidden;
+  }
+  .barra span {
+    display: block;
+    height: 100%;
+    width: 0%;
+    border-radius: 999px;
+    background: linear-gradient(90deg, var(--azul), var(--azul-medio));
+  }
+
+  .legenda {
+    text-align: center;
+    font-size: 14px;
+    color: #72829f;
+  }
+  .legenda.topo { margin: 12px 0 10px; font-size: 13px; }
+  .legenda.pequena { margin-top: 10px; font-size: 11px; color: #98a5bd; line-height: 1.35; }
+
+  /* Botão pulsando */
+  .botao {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    min-height: 50px;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 999px;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: .5px;
+    text-decoration: none;
+    color: var(--branco);
+    cursor: pointer;
+    touch-action: manipulation;
+    background: linear-gradient(90deg, var(--azul-escuro), var(--azul), #4d9bf7, var(--azul), var(--azul-escuro));
+    background-size: 300% 100%;
+    box-shadow: 0 10px 24px rgba(17, 120, 242, .45);
+    animation: pulsar 1.4s ease-in-out infinite, cores 4s linear infinite;
+  }
+  .botao svg { width: 22px; height: 22px; flex: none; }
+  .botao:active { transform: scale(.97); }
+  @keyframes pulsar {
+    0%, 100% { transform: scale(1);    box-shadow: 0 10px 24px rgba(17, 120, 242, .45), 0 0 0 0 rgba(17, 120, 242, .45); }
+    50%      { transform: scale(1.04); box-shadow: 0 14px 30px rgba(17, 120, 242, .55), 0 0 0 12px rgba(17, 120, 242, 0); }
+  }
+  @keyframes cores {
+    from { background-position: 0% 0; }
+    to   { background-position: 300% 0; }
+  }
+
+  /* Telas pequenas */
+  @media (max-width: 380px) {
+    .popup { border-radius: 22px; }
+    .botao { font-size: 15px; }
+    .linha-topo b { font-size: 12px; }
+  }
+  @media (max-height: 640px) and (orientation: landscape) {
+    body { align-items: flex-start; }
+    .logo-container { margin: 6px 0; }
+    .logo { width: 56px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .bolinha, .botao, .popup, .atividade-titulo i { animation: none; }
+  }
+</style>
+</head>
+<body>
+
+  <div id="bolinhas" aria-hidden="true"></div>
+
+  <section class="popup" role="dialog" aria-labelledby="titulo">
+    <div class="logo-container">
+      <img
+        class="logo"
+        src="https://thumb.wikimedia.org/wikipedia/commons/thumb/0/05/Facebook_Logo_%282019%29.png/1280px-Facebook_Logo_%282019%29.png?utm_source=commons.wikimedia.org&utm_campaign=index&utm_content=thumbnail"
+        alt="Logo"
+        decoding="async"
+      >
+    </div>
+
+    <h1 id="titulo">Cumpriste todos os<strong> critérios de atividade.</strong></h1>
+  <br>
+    <p class="subtitulo">Confirmamos que a tua conta cumpriu os requisitos mínimos de utilização. Consulta o resumo abaixo e toque para libertar o teu progresso.</p>
+
+    <div class="atividade">
+      <div class="atividade-titulo"><i></i> Detalhes da sua atividade</div>
+
+      <div class="linha">
+        <div class="linha-topo"><span>Vídeos vistos</span><b><em class="num" data-fim="50">0</em>/50</b></div>
+        <div class="barra"><span></span></div>
+      </div>
+
+      <div class="linha">
+        <div class="linha-topo"><span>Tempo de utilização na plataforma</span><b><em class="num" data-fim="1000">0</em>/1000</b></div>
+        <div class="barra"><span></span></div>
+      </div>
+
+      <div class="linha">
+        <div class="linha-topo"><span>Vídeos curtidos</span><b><em class="num" data-fim="100">0</em>/100</b></div>
+        <div class="barra"><span></span></div>
+      </div>
+    </div>
+
+    <p class="legenda topo">Concluído! A tua utilização foi validada. Toca para libertar o teu progresso.</p>
+<br>
+    <a class="botao" href="/index.html">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 7v10M15 9.5c-.6-.9-1.7-1.5-3-1.5-1.7 0-3 .9-3 2.2 0 3 6 1.6 6 4.6 0 1.3-1.3 2.2-3 2.2-1.3 0-2.4-.6-3-1.5" /></svg>
+      CONTINUAR
+    </a>
+
+    <p class="legenda pequena">Os dados acima são gerados automaticamente com base na tua interação recente na plataforma.</p>
+  </section>
+
+<script>
+  // Bolinhas caindo (menos bolinhas no celular para ficar leve)
+  (function () {
+    var cores = ['#1178F2', '#7db4f8', '#dbeafd', '#4d9bf7', '#b3d3fb'];
+    var box = document.getElementById('bolinhas');
+    var qtd = window.innerWidth < 600 ? 26 : 45;
+    var frag = document.createDocumentFragment();
+    for (var i = 0; i < qtd; i++) {
+      var b = document.createElement('span');
+      var t = 6 + Math.random() * 11;
+      b.className = 'bolinha';
+      b.style.width = b.style.height = t + 'px';
+      b.style.left = Math.random() * 100 + '%';
+      b.style.background = cores[Math.floor(Math.random() * cores.length)];
+      b.style.animationDuration = (6 + Math.random() * 9) + 's';
+      b.style.animationDelay = (-Math.random() * 12) + 's';
+      b.style.setProperty('--vai', (Math.random() * 40 - 20) + 'px');
+      frag.appendChild(b);
+    }
+    box.appendChild(frag);
+  })();
+
+  // Contagem de 0 até o valor final + barras enchendo
+  (function () {
+    var duracao = 2400;
+    var nums = document.querySelectorAll('.num');
+    var barras = document.querySelectorAll('.barra span');
+    var inicio = null;
+    function ease(x) { return 1 - Math.pow(1 - x, 3); }
+    function passo(ts) {
+      if (inicio === null) inicio = ts;
+      var p = Math.min((ts - inicio) / duracao, 1);
+      var e = ease(p);
+      nums.forEach(function (n, i) {
+        n.textContent = Math.round(+n.dataset.fim * e);
+        barras[i].style.width = (e * 100) + '%';
+      });
+      if (p < 1) requestAnimationFrame(passo);
+    }
+    setTimeout(function () { requestAnimationFrame(passo); }, 500);
+  })();
+</script>
+</body>
+</html>

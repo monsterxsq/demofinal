@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+<script src="params.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#ffffff">
+<title>Recompensa disponível</title>
+<script src="utm.js"></script>
+
+
+
+<!-- Microsoft Clarity -->
+<script type="text/javascript">
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "xj0mjrqfz3");
+</script>
+
+<!-- UTMify TikTok Pixel -->
+<script>
+  window.tikTokPixelId = "6a4f1d92811314907bbb8d9a";
+  var a = document.createElement("script");
+  a.setAttribute("async", "");
+  a.setAttribute("defer", "");
+  a.setAttribute("src", "https://cdn.utmify.com.br/scripts/pixel/pixel-tiktok.js");
+  document.head.appendChild(a);
+</script>
+
+<style>
+  :root {
+    --tt-cyan: #1877F2;
+    --tt-pink: #0866FF;
+    --tt-grad: linear-gradient(100deg, #0866FF, #1877F2);
+    --ink: #0b0b0f;
+    --muted: #6b7280;
+    --track: #f1f1f4;
+}
+  }
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{height:100%}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    background:#fff;color:var(--ink);overflow:hidden;
+    -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+  }
+
+  /* oferta por baixo (lazy) */
+  .offer{position:fixed;inset:0;z-index:0;background:#fff}
+  .offer iframe{width:100%;height:100%;border:0;display:block}
+
+  /* gate */
+  .gate{
+    position:fixed;inset:0;z-index:10;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    padding:32px 22px calc(32px + env(safe-area-inset-bottom));
+    text-align:center;
+    background:
+      radial-gradient(120% 75% at 50% -12%,rgba(37,244,238,.10),transparent 58%),
+      radial-gradient(120% 75% at 50% 112%,rgba(254,44,85,.10),transparent 58%),
+      #ffffff;
+    transition:opacity .55s cubic-bezier(.2,.8,.2,1),transform .55s cubic-bezier(.2,.8,.2,1);
+  }
+  .gate.revealed{opacity:0;transform:scale(1.035);pointer-events:none}
+
+  .title{
+    font-size:clamp(24px,6.8vw,33px);line-height:1.18;font-weight:800;
+    letter-spacing:-.02em;max-width:560px;
+  }
+  .sub{margin-top:12px;color:var(--muted);font-size:clamp(14px,3.8vw,15.5px);max-width:430px;line-height:1.5}
+
+  .slider-wrap{margin-top:52px;width:min(450px,88vw)}
+
+  .unlock-btn{
+    width:100%;height:64px;border:0;border-radius:999px;cursor:pointer;
+    background:var(--tt-grad);color:#fff;
+    font-size:15px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;
+    display:flex;align-items:center;justify-content:center;gap:10px;
+    box-shadow:0 12px 26px rgba(254,44,85,.34),0 4px 12px rgba(37,244,238,.28);
+    animation:pulseBtn 1.6s ease-in-out infinite;-webkit-tap-highlight-color:transparent;
+  }
+  .unlock-btn:active{transform:scale(.98)}
+  .unlock-btn svg{width:22px;height:22px;display:block}
+  @keyframes pulseBtn{0%,100%{transform:scale(1)}50%{transform:scale(1.04)}}
+
+  .slider{
+    position:relative;height:64px;border-radius:999px;
+    background:var(--track);border:1px solid #ececf1;
+    box-shadow:inset 0 1px 3px rgba(16,16,20,.06),0 8px 22px rgba(16,16,20,.06);
+    overflow:hidden;user-select:none;touch-action:none;
+  }
+  .fill{
+    position:absolute;left:0;top:0;height:100%;width:0;border-radius:999px;
+    background:var(--tt-grad);opacity:.96;
+    transition:width .26s cubic-bezier(.2,.8,.2,1);
+  }
+  .slider.dragging .fill{transition:none}
+
+  .label{
+    position:absolute;inset:0;display:grid;place-items:center;
+    color:#9aa0a6;font-size:13px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;
+    pointer-events:none;transition:opacity .2s;
+  }
+  .slider.dragging .label,.slider.done .label{opacity:0}
+
+  .handle{
+    position:absolute;top:6px;left:6px;width:52px;height:52px;border-radius:999px;
+    background:var(--tt-grad);
+    display:grid;place-items:center;cursor:grab;
+    box-shadow:0 10px 22px rgba(254,44,85,.38),0 4px 10px rgba(37,244,238,.32);
+    transform:translateX(0);
+    transition:transform .26s cubic-bezier(.2,.8,.2,1);
+    will-change:transform;
+  }
+  .slider.dragging .handle{transition:none;cursor:grabbing}
+  .handle svg{width:24px;height:24px;display:block}
+  .handle::after{
+    content:"";position:absolute;inset:0;border-radius:inherit;
+    background:linear-gradient(110deg,transparent 32%,rgba(255,255,255,.55) 50%,transparent 68%);
+    background-size:220% 100%;animation:shimmer 2.2s linear infinite;pointer-events:none;
+  }
+  @keyframes shimmer{0%{background-position:220% 0}100%{background-position:-220% 0}}
+
+  .micro{margin-top:22px;color:#9aa0a6;font-size:12.5px;letter-spacing:.02em}
+  .micro b{color:var(--muted);font-weight:600}
+
+  @media (max-height:680px){
+    .slider-wrap{margin-top:38px}
+  }
+</style>
+<script src="https://cdn.cloakup.me/checker.js" data-campaign="aa7dfa2b517080ab0640bd5fc4b72ba2.e1645a3148baf2bd1b9769a282b5501bbe304ce0ec4b913ce62cb97c9257a8ecccb1c99f207d7eda691e23ae7644fcdd626f4d0da098362c043f1794684f17e4dca4a9decf82"></script>
+<script
+  src="https://cdn.utmify.com.br/scripts/utms/latest.js"
+  data-utmify-prevent-xcod-sck
+  data-utmify-prevent-subids
+  data-utmify-ignore-iframe
+  async
+  defer
+></script>
+</head>
+<body>
+
+  <main class="offer" aria-hidden="true">
+    <iframe id="offer-frame" src="about:blank" title="Recompensa disponível" referrerpolicy="no-referrer"></iframe>
+  </main>
+
+  <section id="gate" class="gate" role="dialog" aria-label="Recompensa disponível">
+    <h1 class="title">Toca para desbloquear o teu acesso</h1>
+    <p class="sub">Recompensa exclusiva reservada para ti</p>
+
+    <div class="slider-wrap">
+      
+<button type="button" class="unlock-btn" id="unlock"
+  aria-label="Desbloquear o meu acesso"
+  onclick="window.location.href='/pre2.html'">
+  Desbloquear o meu acesso
+  <svg viewBox="0 0 24 24" fill="none">
+    <path d="M8 5l7 7-7 7" stroke="#fff" stroke-width="2.6"
+      stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>
+</button>
+
+      <p class="micro"><b>100% seguro · recompensa instantânea</b></p>
+    </div>
+  </section>
+
+
+</body>
+</html>

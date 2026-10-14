@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Redirecting — CZM Digital Tech</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg: #f5f5f7;
+      --ring-track: #e0e0e5;
+      --ring-fill: #3b82f6;
+      --lock-stroke: #9ca3af;
+      --text-primary: #1c1c1e;
+      --text-sub: #8e8e93;
+      --font: 'Figtree', sans-serif;
+    }
+
+    html, body {
+      height: 100%;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+
+    .wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      animation: fadeUp 0.5s ease forwards;
+      opacity: 0;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── Ring ── */
+    .ring-wrap {
+      position: relative;
+      width: 120px;
+      height: 120px;
+    }
+
+    .ring-svg {
+      width: 100%;
+      height: 100%;
+      transform: rotate(-90deg);
+    }
+
+    .ring-track {
+      fill: none;
+      stroke: var(--ring-track);
+      stroke-width: 5;
+    }
+
+    .ring-progress {
+      fill: none;
+      stroke: var(--ring-fill);
+      stroke-width: 5;
+      stroke-linecap: round;
+      stroke-dasharray: 314.16; /* 2π × 50 */
+      stroke-dashoffset: 314.16;
+      transition: stroke-dashoffset 1s linear;
+    }
+
+    /* Lock icon centered inside ring */
+    .lock-icon {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .lock-icon svg {
+      width: 36px;
+      height: 36px;
+      stroke: var(--lock-stroke);
+      stroke-width: 1.5;
+      fill: none;
+    }
+
+    /* ── Text ── */
+    .label {
+      font-size: 15px;
+      font-weight: 400;
+      color: var(--text-sub);
+      letter-spacing: 0.01em;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="wrap">
+    <div class="ring-wrap">
+      <svg class="ring-svg" viewBox="0 0 110 110">
+        <circle class="ring-track"    cx="55" cy="55" r="50"/>
+        <circle class="ring-progress" id="ring" cx="55" cy="55" r="50"/>
+      </svg>
+      <div class="lock-icon">
+        <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="11" width="18" height="11" rx="2.5"/>
+          <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+        </svg>
+      </div>
+    </div>
+
+    <span class="label">redirecting for payment</span>
+  </div>
+
+  <script>
+    // ─── CONFIG ───────────────────────────────────────────────
+    const CHECKOUT_URL = 'https://vitalleancontrol.com/ck'; // ← replace here
+    const TOTAL = 5; // seconds
+    // ─────────────────────────────────────────────────────────
+
+    const ring = document.getElementById('ring');
+    const circumference = 2 * Math.PI * 50; // ≈ 314.16
+    ring.style.strokeDasharray = circumference;
+    ring.style.strokeDashoffset = circumference;
+
+    let elapsed = 0;
+
+    setTimeout(tick, 80);
+
+    function tick() {
+      elapsed++;
+      const progress = elapsed / TOTAL;
+
+      ring.style.strokeDashoffset = circumference * (1 - progress);
+
+      if (elapsed < TOTAL) {
+        setTimeout(tick, 1000);
+      } else {
+        setTimeout(() => {
+          const params = window.location.search;
+          const separator = CHECKOUT_URL.includes('?') ? '&' : '?';
+          const idParam = 'id=abc123';
+          let finalUrl = CHECKOUT_URL + separator + idParam;
+          if (params) {
+            finalUrl += '&' + params.substring(1);
+          }
+          window.location.href = finalUrl;
+        }, 300);
+      }
+    }
+  </script>
+
+</body>
+</html>

